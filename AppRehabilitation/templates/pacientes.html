@@ -1,0 +1,122 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Tables - SB Admin</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
+</head>
+<body class="sb-nav-fixed">
+    {% include 'menu.html' %}
+    <div id="layoutSidenav">
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid px-4">
+                    <h1 class="mt-4">Pacientes</h1>
+                    <ol class="breadcrumb mb-4">
+                        <li class="breadcrumb-item"><a href="/dashboard">Inicio</a></li>
+                        <li class="breadcrumb-item active">Pacientes</li>
+                    </ol>
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            Datos Informativos de los pacientes
+                        </div>
+                    </div>
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <i class="fas fa-table me-1"></i>
+                            Tabla de Pacientes
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped " id="datatablesSimple">
+                                    <thead>
+                                        <tr>
+                                            <th>Nombres</th>
+                                            <th>Apellidos</th>
+                                            <th>Edad</th>
+                                            <th>Lesión</th>
+                                            <th>Ver</th>
+                                            <th>Editar</th>
+                                            <th>Eliminar</th>
+                                            <th>Reporte</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                       {% for paciente in pacientes %}
+                                        <tr>
+                                            <td>{{ paciente.nombres }}</td>
+                                            <td>{{ paciente.apellidos }}</td>
+                                            <td>{{ paciente.edad }}</td>
+                                            <td>{{ paciente.tipo_lesion }}</td>
+                                            <td>
+                                                <a href="{% url 'paciente_detail' paciente.id %}" class="btn btn-outline-primary">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a href="{% url 'paciente_update' paciente.id %}" class="btn btn-outline-warning">
+                                                    <i class="fas fa-pencil-alt"></i>
+                                                </a>
+
+                                            </td>
+                                            <td>
+                                                <form id="deleteForm" action="{% url 'delete_paciente' paciente.id %}" method="POST">
+                                                    {% csrf_token %}
+                                                    <button type="button" class="btn btn-outline-danger" onclick="confirmDelete()">
+                                                        <i class="fas fa-trash"></i> <!--Eliminar-->
+                                                    </button>
+                                                </form>
+                                            </td>
+                                            <td>
+                                                <form  action="{% url 'generar_reporte' paciente.id %}" method="POST">
+                                                    {% csrf_token %}
+                                                    <button type="submit" class="btn btn-outline-success" id="btnCrearPdf"  >
+                                                        <i class="fa-solid fa-file-pdf"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                       {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            <br><br>
+            <footer class="py-4 bg-light mt-auto">
+               {% include 'footer.html' %}
+            </footer>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+    <script src="{% static 'js/datatables-simple-demo.js' %}"></script>
+   
+    <script>
+        function confirmDelete() {
+            Swal.fire({
+                title: '¿Seguro que desea eliminar al paciente?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById("deleteForm").submit();
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

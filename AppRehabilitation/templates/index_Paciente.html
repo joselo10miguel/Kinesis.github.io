@@ -1,0 +1,329 @@
+{%load static%}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="stylesheet" href="{% static 'css/progress_bar.css' %}">
+    <link rel="stylesheet" href="https://uicdn.toast.com/calendar/latest/toastui-calendar.min.css" />
+    <script src="https://uicdn.toast.com/calendar/latest/toastui-calendar.min.js"></script>
+    <title>Paciente</title>
+    <!-- Custom fonts for this template-->
+
+</head>
+
+<body id="page-top">
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+        <!-- Sidebar -->
+        {% include 'menuPaciente.html' %}
+   
+        <div id="content-wrapper" class="d-flex flex-column">
+     
+            <div id="content">
+                <!-- Topbar -->
+                {% include 'barra_Informativa_Paciente.html' %}
+
+                <div class="container-fluid">
+                    <!-- Page Heading -->
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+                    </div>
+                    <!-- Content Row -->
+                    <div class="row">
+                        
+                        <div class="col-xl-3">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                Número de Rutinas Asignadas
+                                            </div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                                {{paciente.rutinas_asignadas }}</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-3">
+                            <div class="card border-left-warning shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                                Número de rutinas realizadas
+                                            </div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ rutinas_completas }}
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-3">
+                            <div class="card border-left-success shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                               Progreso
+                                            </div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+
+                                                {% if progreso == 100 %}
+                                                <span class="text-success">Completo</span> ✅
+                                                {% else %}
+                                                    <span class="text-danger">Incompleto</span> ❌
+                                                {% endif %}
+
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            {% if progreso == 100 %}
+                                            <i class="fas fa-smile fa-2x s"></i> <!-- Icono feliz -->
+                                            {% else %}
+                                                <i class="fas fa-frown fa-2x "></i> <!-- Icono triste -->
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <br><br>
+
+
+                    
+                    <div class="col-xl-12 col-lg-10">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h6 class="m-0 font-weight-bold text-primary">Su progreso</h6>
+
+                            </div>
+                            <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                                <div class="block">
+                                    <div class="box">
+                                        <p class="number">
+                                            <span class="num">{{ progreso }}</span>
+                                            <span class="sub">%</span>
+                                        </p>
+                                        <p class="title">Progreso</p>
+                                    </div>
+                                    <span class="dots"></span>
+                                    <svg class="svg ">
+                                        <defs>
+                                            <linearGradient id="gradientStyle">
+                                                <stop offset="0%" stop-color="#78C000" />
+                                                <stop offset="100%" stop-color="#78C000" />
+                                            </linearGradient>
+                                        </defs>
+                                        <circle class="circle" cx="90" cy="90" r="80" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+
+                    <!-- Content Row -->
+                    <div class="row">
+                        <!-- Area Chart -->
+                        <div class="col-xl-12 col-lg-12">
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <div
+                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Horario de sus Rutinas</h6>
+                                 
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    
+                                    <nav >
+                                        <div class="btn-group" role="group" aria-label="Calendar Controls">
+                                            <button class="btn btn-secondary today" id="todayButton">Hoy</button>
+                                            <button class="btn btn-secondary prev" id="prevButton">
+                                                <img alt="prev" src="{% static 'img/ic-arrow-line-left.png' %}"
+                                                    srcset="./images/ic-arrow-line-left@2x.png 2x, ./images/ic-arrow-line-left@3x.png 3x" />
+                                            </button>
+                                            <button class="btn btn-secondary next" id="nextButton">
+                                                <img alt="prev" src="{% static 'img/ic-arrow-line-right.png' %}"
+                                                    srcset="./images/ic-arrow-line-right@2x.png 2x, ./images/ic-arrow-line-right@3x.png 3x" />
+                                            </button>
+                                            <span class="navbar--range"></span>
+                                        </div>
+
+                                    </nav>
+                                    <div class="card-body">
+                                        <main id="calendar" style="height: 400px;"></main>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Pie Chart -->
+                    </div>
+                    <!-- Content Row -->
+                    <div class="row">
+                        <!-- Content Column -->
+                    </div>
+                    <!-- /.container-fluid -->
+                </div>
+                <!-- End of Main Content -->
+                <!-- Footer -->
+                <footer class="sticky-footer bg-white">
+                    {% include 'footerPaciente.html' %}
+                </footer>
+                <!-- End of Footer -->
+            </div>
+            <!-- End of Content Wrapper -->
+        </div>
+    </div>
+
+    <script src="{% static  'js/progress.js' %}"></script>
+    <script src="{% static  'js/calendar.js' %}"></script>
+    <script src="{% static  'js/moment.js' %}"></script>
+    <script>
+        const Calendar = tui.Calendar;
+        const calendar = new Calendar("#calendar", {
+            defaultView: "month",
+
+           
+            isReadOnly: false,
+            template: {
+                task: function (model) {
+                    return `<span style="background-color: #9e5fff; color: #fff;"><i class="fa-solid fa-user"></i> ${model.title}  </span>`;
+                },
+            },
+            calendars: [
+                {
+                    id: "calendario_1",
+                    name: "Rutinas Personales",
+                    color: "#ffffff",
+                    borderColor: '#9e5fff',
+                    backgroundColor: '#9e5fff',
+                    dragBackgroundColor: '#9e5fff',
+                },
+            ],
+        });
+
+        calendar.setOptions({
+            week: {
+                taskView: false,
+            },
+        });
+
+        const rutinas = JSON.parse('{{ rutinas|safe }}');
+    
+    
+        const events = rutinas.map((rutina) => {
+         
+            const fechaInicio = new Date(rutina.fields.fecha_inicio);
+
+            const fechaUTC = fechaInicio.toISOString();
+            fechaInicio.setUTCHours(fechaInicio.getUTCHours() + 5);
+
+            const fechaFin = new Date(fechaInicio);
+            fechaFin.setHours(23, 59, 59, 999); 
+
+            return {
+                id: rutina.fields.numero_rutina,
+                calendarId: "calendario_1",
+                title: `Rutina ${rutina.fields.numero_rutina +1}`,
+                body: `Repeticiones a Realizar${rutina.fields.repeticiones_asignadas}`,
+                start: fechaInicio,
+                end: fechaFin,
+                isReadOnly: false,
+                isPrivate: false,
+                state: rutina.fields.is_completed,
+                category: "task",
+                
+            };
+        });
+
+        calendar.createEvents(events);
+
+        function getRandomColor() {
+            const letters = "0123456789ABCDEF";
+            let color = "#";
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        // Elements
+        const range = $('.navbar--range');
+        const viewSelector = $('#viewSelector');
+        const todayButton = $('#todayButton');
+        const prevButton = $('#prevButton');
+        const nextButton = $('#nextButton');
+
+        // Event Handlers
+        function displayRenderRange() {
+            range.text(getNavbarRange(calendar.getDateRangeStart(), calendar.getDateRangeEnd(), calendar.getViewName()));
+        }
+
+        viewSelector.on('change', function () {
+            const selectedView = $(this).val();
+            calendar.changeView(selectedView, true);
+        });
+
+        todayButton.on('click', function () {
+            calendar.today();
+            displayRenderRange();
+        });
+
+        prevButton.on('click', function () {
+            calendar.prev();
+            displayRenderRange();
+        });
+
+        nextButton.on('click', function () {
+            calendar.next();
+            displayRenderRange();
+        });
+
+        function getNavbarRange(tzStart, tzEnd, viewType) {
+            const start = tzStart.toDate();
+            const end = tzEnd.toDate();
+            let middle;
+            if (viewType === 'month') {
+                middle = new Date(start.getTime() + (end.getTime() - start.getTime()) / 2);
+                return moment(middle).format('YYYY-MM');
+            }
+            if (viewType === 'day') {
+                return moment(start).format('YYYY-MM-DD');
+            }
+            if (viewType === 'week') {
+                return `${moment(start).format('YYYY-MM-DD')} ~ ${moment(end).format('YYYY-MM-DD')}`;
+            }
+            throw new Error('no view type');
+        }
+
+        // Initial call to displayRenderRange
+        displayRenderRange();
+
+    </script>
+
+</body>
+
+</html>

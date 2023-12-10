@@ -1,0 +1,200 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.3.4/dist/css/datepicker.min.css">
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Pacientes</title>
+       
+    </head>
+    <body class="sb-nav-fixed">
+        {% include 'menu.html' %}
+        <div id="layoutSidenav">
+            <!--Menu -->
+            
+
+
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid px-4">
+                        <h1 class="mt-4"> Agregar nuevo Paciente</h1>
+                        <ol class="breadcrumb mb-4">
+                            <li class="breadcrumb-item"><a href="/dashboard">Inicio</a></li>
+                            <li class="breadcrumb-item active"> Crear Pacientes</li>
+                        </ol>
+                       
+                        <div class="container mt-5">
+                          <div class="row justify-content-center">
+                            <div class="col-md-6">
+                             
+                              {% if error %}
+                              <div class="alert alert-danger" role="alert">
+                                  {{ error }}
+                              </div>
+                              {% endif %}
+                               {% block content %}
+                              <form action="/pacientes/create/" method="POST" class="rounded p-4 shadow">
+                                <h3 class="text-center mb-4">Datos del Paciente</h3>
+                                {% csrf_token %}
+                                {{ form.non_field_errors }}
+                                <div class="mb-3">
+                                  <label for="{{ form.nombres.id_for_label }}" class="form-label font-weight-bold">Nombres</label>
+                                  <input type="text" class="form-control" id="{{ form.nombres.id_for_label }}" name="{{ form.nombres.name }}"  pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s"  required>
+
+                          
+                                  {{ form.non_field_errors }}
+                                </div>
+                                <div class="mb-3">
+                                  <label for="{{ form.apellidos.id_for_label }}" class="form-label font-weight-bold">Apellidos</label>
+                                  <input type="text" class="form-control" id="{{ form.apellidos.id_for_label }}" name="{{ form.apellidos.name }}" pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s" required>
+                                
+                                  {{ form.non_field_errors }}
+                                </div>
+                                <div class="mb-3">
+                                  <label for="{{ form.correo.id_for_label }}" class="form-label font-weight-bold">Correo Electrónico</label>
+                                  <input type="email" class="form-control" id="{{ form.correo.id_for_label }}" name="{{ form.correo.name }}"  placeholder="name@ejemplo.com">
+                                
+                                  {{ form.non_field_errors }}
+                                </div>
+                                <div class="mb-3">
+                                  <label for="{{ form.cedula.id_for_label }}" class="form-label font-weight-bold">Cédula</label>
+                                  <input type="number" class="form-control" id="{{ form.cedula.id_for_label }}" name="{{ form.cedula.name }}" maxlength="10" >
+                                  
+                                  {{ form.non_field_errors }}
+                                </div>
+                                <div class="mb-3">
+                                  <label for="{{ form.direccion.id_for_label }}" class="form-label font-weight-bold">Dirección</label>
+                                  <input type="text" class="form-control" id="{{ form.direccion.id_for_label }}" name="{{ form.direccion.name }}" >
+                                  {{ form.non_field_errors }}
+                                </div>
+                                <div class="mb-3">
+                                  <label for="{{ form.celular.id_for_label }}" class="form-label font-weight-bold">Celular</label>
+                                  <input type="number" class="form-control" id="{{ form.celular.id_for_label }}" name="{{ form.celular.name }}" maxlength="10" >
+                                  {{ form.non_field_errors }}
+                                </div>
+
+                                <div class="mb-3">
+                                  <label class="form-label font-weight-bold">Género</label>
+                                  <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="{{ form.genero.name }}" id="Masculino" value="Masculino" checked>
+                                    <label class="form-check-label" for="Masculino">
+                                      Masculino
+                                    </label>
+                                  </div>
+                                  <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="{{ form.genero.name }}" id="Femenino" value="Femenino">
+                                    <label class="form-check-label" for="Femenino">
+                                      Femenino
+                                    </label>
+                                  </div>
+                                  {{ form.non_field_errors }}
+                                </div>
+
+                                <div class="mb-3">
+                                  <label for="{{ form.edad.id_for_label }}" class="form-label font-weight-bold">Edad</label>
+                                  <input type="number" class="form-control" id="{{ form.edad.id_for_label }}" name="{{ form.edad.name }}" maxlength="2" >
+                                  {{ form.non_field_errors }}
+                                </div>
+
+                                <div class="mb-3">
+                                  <label for="{{ form.tipo_lesion.id_for_label }}" class="form-label font-weight-bold">Tipo de Lesión</label>
+                                  <select class="form-select" id="{{ form.tipo_lesion.id_for_label }}" name="{{ form.tipo_lesion.name }}">
+                                      <option value="">Seleccionar tipo de lesión</option>
+                                      <option value="Luxación del hombro izquierdo">Luxación del hombro izquierdo</option>
+                                      <option value="Luxación del hombro derecho">Luxación del hombro derecho</option>
+                                      <option value="Lesión media en el hombro izquierdo">Lesión media en el hombro izquierdo</option>
+                                      <option value="Lesión media en el hombro derecho">Lesión media en el hombro derecho</option>
+                                  </select>
+                                  {{ form.non_field_errors }}
+                              </div>
+
+                                 <!-- Crear datos medicos  -->
+
+                                 <h3 class="text-center mb-4">Rutina de Ejercicio</h3>
+
+
+
+                                 <div class="mb-3">
+                                  <label for="{{ form.rutinas_asignadas.id_for_label }}" class="form-label font-weight-bold">Numero de Rutinas</label>
+                                  <div class="input-group">
+                                    <input type="number" class="form-control" id="{{ form.rutinas_asignadas.id_for_label }}" name="{{ form.rutinas_asignadas.name }}" maxlength="3">
+                                  </div>
+                                  <ul id="rutina-list" style="display: none;"></ul>
+
+                                  {{ form.non_field_errors }}
+                                </div>
+                                <div class="mb-3">
+
+                                  <label  class="form-label font-weight-bold">Fechas de cada Rutina</label>
+                                  <input type="text" name="fechas" id="day-picker" class="form-control" placeholder="Elige las fechas de cada rutina">
+                                </div>
+                                
+                                  <div class="mb-3">
+                                    <label  class="form-label font-weight-bold">Repeticiones por Rutina</label>
+                                    <input type="number" class="form-control" id="repeticiones_por_rutina" name="repeticiones_por_rutina" maxlength="3" >
+                                    {{ form.non_field_errors }}
+                                    </div> 
+                                 <div class="mb-3">
+                                  <label for="{{ form.tiempo_descanso_entre_rutinas.id_for_label }}" class="form-label font-weight-bold">Tiempo de descanso entre Rutina</label>
+                                  <input type="number" class="form-control" id="{{ form.tiempo_descanso_entre_rutinas.id_for_label }}" name="{{ form.tiempo_descanso_entre_rutinas.name }}" maxlength="3" >
+                                  {{ form.non_field_errors }}
+                                </div> 
+                                <div class="mb-3">
+                                  <label  class="form-label font-weight-bold">Tiempo de descanso entre Repeticiones</label>
+                                  <input type="number" class="form-control" id="tiempo_repeticiones" name="tiempo_repeticiones" maxlength="3" >
+                                  {{ form.non_field_errors }}
+                                </div>
+                                <div class="mb-3">
+                                  <label for="{{ form.recomendacion.id_for_label }}" class="form-label font-weight-bold">Recomendación</label>
+                                  <input type="text" class="form-control" id="{{ form.recomendacion.id_for_label }}" name="{{ form.recomendacion.name }}" maxlength="300" >
+                                  {{ form.non_field_errors }}
+                                </div> 
+                                   <!-- Crear credenciales del paciente -->
+
+                                <h3 class="text-center mb-4">Credenciales del Paciente</h3>
+                               
+                                <div class="mb-3">
+                                  <label for="{{ form.username.id_for_label }}" class="form-label font-weight-bold">Nombre de Usuario</label>
+                                  <input type="text" class="form-control" id="{{ form.username.id_for_label }}" name="{{ form.username.name }}" required>
+                                </div>
+                                <div class="mb-3">
+                                  <label for="{{ form.password.id_for_label }}" class="form-label font-weight-bold">Contraseña</label>
+                                  <input type="password" class="form-control" id="{{ form.password.id_for_label }}" name="{{ form.password.name }}" required>
+                                </div>
+
+                 
+                                
+                                <div class="d-flex justify-content-center">
+                                  <button type="submit" class="btn btn-primary">Guardar</button>
+                                </div>
+                              </form>
+                              {% endblock %}
+                            </div>
+                          </div>
+                        </div>
+                        
+
+
+
+
+
+                        
+                    </div><br><br>
+                </main>
+                <footer class="py-4 bg-light mt-auto">
+                   {% include 'footer.html'%}
+                </footer>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.3.4/dist/js/datepicker-full.min.js"></script>
+        <script src="{% static 'js/jquery.min.js' %}"></script>
+        <script src = "{%static 'js/picker_day.js' %}"></script>
+      </body>
+</html>
+
+<!------------------------------->
+

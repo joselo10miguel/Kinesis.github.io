@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <title>Informe médico</title>
+  <style>
+    * {
+      font-family: sans-serif;
+    }
+    .cuerpo {
+        max-width: 800px; /* Define el ancho máximo de la clase cuerpo */
+        margin: 3cm auto; /* Centra la clase cuerpo */
+        padding: 20px; /* Agrega un espacio interno a la clase cuerpo */
+    }
+
+    header {
+      background-color: #ffffff;
+      padding: 20px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    h1 {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 0; /* Evita el margen predeterminado del h1 */
+      text-align: center;
+    }
+    .fecha {
+      font-size: 13px;
+      font-weight: bold;
+    }
+    .texto {
+      font-size: 15px;
+    }
+
+    .kinesis-text {
+      color: #808080; /* Media plomo */
+    }
+
+    .image-container {
+      flex-grow: 0; /* Evita que la imagen crezca para ocupar el espacio restante */
+      margin-right: 20px; /* Espacio entre la imagen y el texto */
+    }
+
+    img {
+      max-width: 100%; /* Asegura que la imagen no supere el ancho del contenedor */
+    }
+
+    summary {
+      margin-bottom: 30px;
+    }
+
+    p {
+      font-size: 15px;
+      margin-bottom: 10px; /* Reduce el espacio entre párrafos */
+    }
+
+    .body-content {
+      padding: 20px;
+    }
+
+    .body-content > * {
+      margin-bottom: 20px;
+    }
+
+    .diagnostico {
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .tratamiento {
+      font-style: italic;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .pronostico {
+      font-size: 14px;
+    }
+
+    .tabla {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    .tabla th, .tabla td {
+      border: 1px solid #000000;
+      padding: 13px;
+      text-align: center;
+    }
+
+    .tabla th {
+      background-color: #f0f0f0; /* Color medio plomo claro */
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="image-container">
+      <h3 class="kinesis-text"><img src="https://www.utpl.edu.ec/sites/default/files/marca%20UTPL%202018-03.png" alt="Lesión" width="150px" height="90px"> |Kinesis</h3>
+    </div>
+
+    <div class="cuerpo">
+      <h1>Informe médico</h1>
+      <h2 class=" fecha"> {{fecha_actual}}</h2>
+    </div>
+  </header>
+  <summary>
+    <p class="texto">El paciente  <strong>{{ paciente.nombres }} {{ paciente.apellidos }} </strong> ha sido confirmado con <strong>{{ paciente.tipo_lesion }}</strong>.</p>
+  </summary>
+  <p class="tratamiento">Tratamiento recomendado:</p>
+  <p>
+    El paciente se encuentra bajo la supervisión del área médica por el Doctor <strong>{{ paciente.doctor }}</strong>, realizando su proceso de recuperación, Se le recomienda realizar: <strong>{{paciente.rutinas_asignadas}} </strong>rutinas la cual constan de <strong>{{ rutina.repeticiones_asignadas }}</strong> repeticiones por cada una. 
+  </p>
+  <body>
+
+    <div class="body-content">
+      <p class="diagnostico">Progreso:</p>
+      
+      <table class="tabla">
+        <thead>
+            <tr>
+                <th>Fecha de las Rutinas</th>
+                <th>Progreso</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for dia in data_por_dia %}
+                <tr>
+                    <td>{{dia.fecha}}</td>
+                    <td>{{dia.progreso}}%</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+
+      <p class="pronostico">Pronóstico:</p>
+      <p>
+        <strong>{{ paciente.nombres }} {{ paciente.apellidos }}</strong> lleva un progreso del <strong>{{ progreso }}%</strong>.
+        {% if progreso == 100 %}
+            Se espera que, culminado el tratamiento, el paciente haya completado totalmente su recuperación.
+        {% else %}
+            Aún queda trabajo por hacer en la recuperación de la <strong>{{ paciente.tipo_lesion }}</strong>.
+        {% endif %}
+      </p>
+    </div>
+  </body>
+</body>
+</html>

@@ -1,0 +1,191 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <link rel="stylesheet" href="{% static 'css/progress_bar.css' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+    <title>Detalles del Paciente</title>
+</head>
+<body class="sb-nav-fixed">
+    {% include 'menu.html' %}
+    <div id="layoutSidenav">
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid px-4">
+                    <h1 class="mt-4">Detalles del Paciente</h1>
+                    <ol class="breadcrumb mb-4">
+                        <li class="breadcrumb-item"><a href="/dashboard">Inicio</a></li>
+                        <li class="breadcrumb-item"><a href="/pacientes">Pacientes</a></li>
+                        <li class="breadcrumb-item active">{{ paciente.nombres }} {{ paciente.apellidos }}</li>
+                    </ol>
+                    
+                    <div class="container mt-4">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fa fa-id-card"></i>
+                                Datos del Paciente
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <p><strong>Nombres:</strong> {{ paciente.nombres }}</p>
+                                        <p><strong>Apellidos:</strong> {{ paciente.apellidos }}</p>
+                                        <p><strong>Correo:</strong> {{ paciente.correo }}</p>
+                                        <p><strong>Cédula:</strong> {{ paciente.cedula }}</p>
+                                        <p><strong>Dirección:</strong> {{ paciente.direccion }}</p>
+                                        <p><strong>Celular:</strong> {{ paciente.celular }}</p>
+                                        <p><strong>Género:</strong> {{ paciente.genero }}</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p><strong>Edad:</strong> {{ paciente.edad }}</p>
+                                        <p><strong>Lesión:</strong> {{ paciente.tipo_lesion }}</p>
+                                        <p><strong>Fecha de Ingreso:</strong> {{ paciente.created }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fa fa-id-card"></i>
+                                Progreso del Paciente
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <p><strong>Rutinas Asignadas:</strong> {{ paciente.rutinas_asignadas }}</p>
+                                        <p><strong>Repeticiones por Rutina:</strong> {{ rutina.repeticiones_asignadas }}</p>
+                                        <p><strong>Descanso entre Rutina:</strong> {{ paciente.tiempo_descanso_entre_rutinas }}</p>
+                                        <p><strong>Descanso entre Repetecion:</strong> {{ rutina.tiempo_descanso_repeticiones }}</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <!-- Barra de progreso -->
+                                        <div class="card-body d-flex flex-column align-items-center">
+                                            <div class="block">
+                                                <div class="box">
+                                                    <p class="number">
+                                                        <span class="num">{{ progreso }}</span>
+                                                        <span class="sub">%</span>
+                                                    </p>
+                                                    <p class="title">Progreso</p>
+                                                </div>
+                                                <span class="dots"></span>
+                                                <svg class="svg">
+                                                    <defs>
+                                                        <linearGradient id="gradientStyle">
+                                                            <stop offset="0%" stop-color="#78C000" />
+                                                            <stop offset="100%" stop-color="#78C000" />
+                                                        </linearGradient>
+                                                    </defs>
+                                                    <circle class="circle" cx="90" cy="90" r="80" />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="container">
+                                <div class="col-md-12">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            Rutinas
+                                        </div>
+                                        <div class="panel-body">
+                                            <table class="table table-condensed table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th>Fecha</th>
+                                                        <th>Progreso</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for dia,data in data_por_dia %}
+
+                                                    <tr data-toggle="collapse" data-target="#rutina{{dia|date:'d-M-Y'}}" class="accordion-toggle">
+                                                        <td><button class="btn btn-default btn-xs"><i class="fa-solid fa-eye"></i></button></td>
+                                                        <td>{{dia}}</td>
+                                                        {% if data.progreso == 0 %}
+                                                            <td><span class="badge badge-info">Sin Progreso</span></td>
+                                                        {% else %}
+                                                            <td>
+                                                                <div class="progress">
+                                                                    {% if data.progreso < 50 %}
+                                                                        <div class="progress-bar bg-danger" role="progressbar" style="width: {{ data.progreso}}%;" aria-valuenow="{{ data.progreso}}" aria-valuemin="0" aria-valuemax="100">{{ data.progreso }}%</div>
+                                                                    {% elif data.progreso == 100 %}
+                                                                        <div class="progress-bar bg-success" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">100%</div>
+                                                                    {% else %}
+                                                                        <div class="progress-bar bg-success" role="progressbar" style="width: {{ data.progreso }}%;" aria-valuenow="{{ data.progreso}}" aria-valuemin="0" aria-valuemax="100">{{ data.progreso }}%</div>
+                                                                    {% endif %}
+                                                                </div>
+                                                            </td>
+                                                        {% endif %}
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="3" class="hiddenRow">
+                                                            <div class="accordian-body collapse" id="rutina{{dia|date:'d-M-Y'}}">
+                                                                <table class="table table-striped">
+                                                                    <thead>
+                                                                        <tr class="info">
+                                                                            <th>Numero Rutina</th>
+                                                                            <th>Fecha Inicio</th>
+                                                                            <th>Fecha Fin</th>
+                                                                            <th>Estado</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {% for rutina in data.rutinas %}
+                                                                        <tr>
+                                                                            <td>{{rutina.numero_rutina}}</td>
+                                                                            <td>{{rutina.fecha_inicio}}</td>
+                                                                            <td>{{rutina.fecha_fin}}</td>
+                                                                            {% if rutina.is_completed %}
+                                                                            <td><span class="badge badge-success">Completada</span></td>
+                                                                            {% else %}
+                                                                            <td><span class="badge badge-danger">No completada</span></td>
+                                                                            {% endif %}
+                                                                        </tr>
+                                                                        {% endfor %}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                            
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
+
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </main>
+            <footer class="py-4 bg-light mt-auto">
+                {% include 'footer.html' %}
+            </footer>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="{% static 'js/progress.js' %}"></script>
+</body>
+</html>

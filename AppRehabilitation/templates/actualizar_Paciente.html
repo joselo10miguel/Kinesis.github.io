@@ -1,0 +1,325 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Actualizar Paciente - SB Admin</title>
+</head>
+<body class="sb-nav-fixed">
+    {% include 'menu.html' %}
+    <div id="layoutSidenav">
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid px-4">
+                    <h1 class="mt-4">Actualizar Paciente</h1>
+                    <ol class="breadcrumb mb-4">
+                        <li class="breadcrumb-item"><a href="/dashboard">Inicio</a></li>
+                        <li class="breadcrumb-item active">Actualizar Paciente</li>
+                    </ol>
+
+                    <div class="container mt-5">
+                        <div class="row justify-content-center">
+                            <div class="col-md-6">
+                                {% if error %}
+                                <div class="alert alert-danger" role="alert">
+                                    {{ error }}
+                                </div>
+                                {% endif %}
+                                {% block content %}
+                                <form action="/update/{{ paciente.id }}/" method="POST" class="rounded p-4 shadow">
+                                    {% csrf_token %}
+                                    <h3 class="text-center mb-4">Datos del Paciente</h3>
+                                   
+                                    {{ form.non_field_errors }}
+
+                                    <div class="mb-3">
+                                        <label for="{{ form.nombres.id_for_label }}" class="form-label font-weight-bold">Nombres</label>
+                                        <input type="text" class="form-control" id="{{ form.nombres.id_for_label }}" name="nombres" value="{{ paciente.nombres }}" pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s" required>
+                                        {{ form.non_field_errors }}
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="{{ form.apellidos.id_for_label }}" class="form-label font-weight-bold">Apellidos</label>
+                                        <input type="text" class="form-control" id="{{ form.apellidos.id_for_label }}" name="apellidos" value="{{ paciente.apellidos }}" pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s" required>
+                                        {{ form.non_field_errors }}
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="{{ form.correo.id_for_label }}" class="form-label font-weight-bold">Correo Electrónico</label>
+                                        <input type="email" class="form-control" id="{{ form.correo.id_for_label }}" name="correo" value="{{ paciente.correo }}" placeholder="name@ejemplo.com">
+                                        {{ form.non_field_errors }}
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="{{ form.cedula.id_for_label }}" class="form-label font-weight-bold">Cédula</label>
+                                        <input type="number" class="form-control" id="{{ form.cedula.id_for_label }}" name="cedula" value="{{ paciente.cedula }}" maxlength="10">
+                                        {{ form.non_field_errors }}
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="{{ form.direccion.id_for_label }}" class="form-label font-weight-bold">Dirección</label>
+                                        <input type="text" class="form-control" id="{{ form.direccion.id_for_label }}" name="direccion" value="{{ paciente.direccion }}">
+                                        {{ form.non_field_errors }}
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="{{ form.celular.id_for_label }}" class="form-label font-weight-bold">Celular</label>
+                                        <input type="number" class="form-control" id="{{ form.celular.id_for_label }}" name="celular" value="{{ paciente.celular }}" maxlength="10">
+                                        {{ form.non_field_errors }}
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label font-weight-bold">Género</label>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="genero" id="Masculino" value="Masculino" {% if paciente.genero == 'Masculino' %}checked{% endif %}>
+                                            <label class="form-check-label" for="Masculino">Masculino</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="genero" id="Femenino" value="Femenino" {% if paciente.genero == 'Femenino' %}checked{% endif %}>
+                                            <label class="form-check-label" for="Femenino">Femenino</label>
+                                        </div>
+                                        {{ form.non_field_errors }}
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="{{ form.edad.id_for_label }}" class="form-label font-weight-bold">Edad</label>
+                                        <input type="number" class="form-control" id="{{ form.edad.id_for_label }}" name="edad" value="{{ paciente.edad }}" maxlength="2">
+                                        {{ form.non_field_errors }}
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="{{ form.tipo_lesion.id_for_label }}" class="form-label font-weight-bold">Tipo de Lesión</label>
+                                        <select class="form-select" id="{{ form.tipo_lesion.id_for_label }}" name="tipo_lesion">
+                                            <option value="">Seleccionar tipo de lesión</option>
+                                            <option value="Luxación del hombro izquierdo" {% if paciente.tipo_lesion == 'Luxación del hombro izquierdo' %}selected{% endif %}>Luxación del hombro izquierdo</option>
+                                            <option value="Luxación del hombro derecho" {% if paciente.tipo_lesion == 'Luxación del hombro derecho' %}selected{% endif %}>Luxación del hombro derecho</option>
+                                            <option value="Lesión media en el hombro izquierdo" {% if paciente.tipo_lesion == 'Lesión media en el hombro izquierdo' %}selected{% endif %}>Lesión media en el hombro izquierdo</option>
+                                            <option value="Lesión media en el hombro derecho" {% if paciente.tipo_lesion == 'Lesión media en el hombro derecho' %}selected{% endif %}>Lesión media en el hombro derecho</option>
+                                        </select>
+                                        {{ form.non_field_errors }}
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="{{ form.tiempo_descanso_entre_rutinas.id_for_label }}" class="form-label font-weight-bold">Tiempo de descanso entre Rutina</label>
+                                        <input type="number" class="form-control" id="{{ form.tiempo_descanso_entre_rutinas.id_for_label }}" value="{{paciente.tiempo_descanso_entre_rutinas}}" name="tiempo_descanso_entre_rutinas" maxlength="3" >
+                                        {{ form.non_field_errors }}
+                                      </div> 
+
+                                    <h1>Rutinas</h1>
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Fecha de Inicio</th>
+                                                <th>Fecha de Fin</th>
+                                                <th>Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for rutina in rutinas %}
+                                                <tr>
+                                                    <td>{{ rutina.fecha_inicio }}</td>
+                                                    <td>{{ rutina.fecha_fin }}</td>
+                                                    <td>
+                                                        {% if not rutina.is_completed %}
+                                                            <a class="btn btn-primary open-dialog-edit" data-rutina-id="{{ rutina.numero_rutina }}" data-rutina-fecha="{{ rutina.fecha_inicio|date:"Y-m-d" }}" data-paciente-id="{{ paciente.id }}">Editar Rutina</a>  
+                                                            <div class="modal" id="rutina-dialog-edit-{{ rutina.numero_rutina }}" style="display: none">          
+                                                                <div class="modal-dialog">
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-body">
+                                                                            <label for="fecha_rutina">Fecha de la nueva rutina:</label>
+                                                                            <input type="date" id="fecha_rutina_edit_{{rutina.numero_rutina}}" name="fecha_rutina" class="form-control">
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                                                            <button class="btn btn-primary edit-rutina-btn" data-paciente-id="{{ paciente.id }}" data-rutina-id="{{ rutina.numero_rutina }}" id="editar-rutina-{{rutina.numero_rutina}}">Aceptar</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            </div> <br> <br>
+                                                            <button class="btn btn-danger delete-rutina-btn" data-rutina-id="{{ rutina.numero_rutina }}" data-paciente-id="{{ paciente.id }}">Quitar Rutina</button>
+                                                        {% else %}
+                                                            <p>Rutina completa</p>
+                                                        {% endif %}
+                                                    </td>
+                                                </tr>
+                                            {% empty %}
+                                                <tr>
+                                                    <td colspan="3">No hay rutinas disponibles.</td>
+                                                </tr>
+                                            {% endfor %}
+
+                                        </tbody>
+                                    </table>
+                                    
+                                    <a  id="open-dialog" class="btn btn-success">Agregar Rutina</a>
+                                    
+                                    <div id="rutina-dialog" class="modal" style="display: none;">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-body">
+                                                    <label for="fecha_rutina">Fecha de la nueva rutina:</label>
+                                                    <input type="date" id="fecha_rutina" name="fecha_rutina" class="form-control">
+                                                </div>
+                                                <div class="modal-footer">
+                                                    
+                                                    <button type="button" class="btn btn-secondary" id="close_dialog_add" data-dismiss="modal">Cancelar</button>
+                                                    <button  class="btn btn-primary add-rutina-btn " data-paciente-id="{{ paciente.id }}" id="guardar-rutina">Aceptar</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>  
+                                
+                
+
+                                    <div class="mb-3">
+                                        <h3 class="text-center mb-4">Recomendacion</h3>
+                                        <input type="text" class="form-control" id="{{ form.recomendacion.id_for_label }}" name="{{ form.recomendacion.name }}" value="{{ paciente.recomendacion }}" maxlength="300">
+                                        {{ form.non_field_errors }}
+                                    </div>
+
+                                    <h3 class="text-center mb-4">Credenciales del Paciente</h3>
+
+                                    <div class="mb-3">
+                                        <label for="{{ form.username.id_for_label }}" class="form-label font-weight-bold">Nombre de Usuario</label>
+                                        <input type="text" class="form-control" id="{{ form.username.id_for_label }}" name="username" value="{{ username }}" required>
+                                    </div>
+
+                                    
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-center">
+                                            <label for="cambiar-contrasena" class="form-check-label">Cambiar Contraseña</label>
+                                            <input type="checkbox" id="cambiar-contrasena" class="form-check-input">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3" id="campo-contrasena" style="display: none;">
+                                        <label for="{{ form.password.id_for_label }}" class="form-label font-weight-bold">Contraseña</label>
+                                        <input type="password" class="form-control" id="{{ form.password.id_for_label }}" name="password">
+                                    </div>
+                                    
+
+                                    <div class="d-flex justify-content-center">
+                                        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                                    </div>
+                                </form>
+                                {% endblock %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            <footer class="py-4 bg-light mt-auto">
+                {% include 'footer.html' %}
+            </footer>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Función para eliminar rutina
+            $('.delete-rutina-btn').on('click', function () {
+                var rutinaId = $(this).data('rutina-id');
+                var pacienteId = $(this).data('paciente-id');
+
+                $.ajax({
+                    url: '/delete/rutina/' + rutinaId + '/',
+                    type: 'POST',
+                    data: {
+                        'paciente_id': pacienteId,
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    success: function (data) {
+                        if (data.success) {
+                            $('#rutina-' + rutinaId).remove();
+                        }
+                    }
+                });
+            });
+
+            $('.edit-rutina-btn').on('click', function () {
+                var rutinaId = $(this).data('rutina-id');
+                var pacienteId = $(this).data('paciente-id');
+                var rutinaFecha = $('#fecha_rutina_edit_'+rutinaId).val();
+
+                $.ajax({
+                    url: '/update/rutina/' + rutinaId + '/',
+                    type: 'POST',
+                    data: {
+                        'paciente_id': pacienteId,
+                        'fecha_rutina': rutinaFecha,
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    success: function (data) {
+                        console.log(data);
+
+                    }
+                });
+            });
+
+            //agregar rutina
+            $('.add-rutina-btn').on('click', function () {
+                var fechaNuevaRutina = $('#fecha_rutina').val();
+                var pacienteId = $(this).data('paciente-id');
+
+                $.ajax({
+                    url: '/add/rutina/' + pacienteId + '/',
+                    type: 'POST',
+                    data: {
+                        'fecha_rutina': fechaNuevaRutina,
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    success: function (data) {
+                        if (data.success) {
+                            $('#rutina-' + rutinaId).remove();
+                        }
+                    }
+                });
+            });
+
+            // Función para abrir el diálogo
+            $("#open-dialog").on("click", function () {
+                $("#rutina-dialog").modal("show");
+            });
+            
+            // Función para cerrar el dialogo
+            $("#close_dialog_add").on("click", function () {
+                $(this).closest(".modal").modal("hide");
+            });
+
+
+
+            // Función para mostrar u ocultar el campo de contraseña
+            const checkboxCambiarContrasena = document.getElementById('cambiar-contrasena');
+            const campoContrasena = document.getElementById('campo-contrasena');
+
+            checkboxCambiarContrasena.addEventListener('change', function () {
+                if (checkboxCambiarContrasena.checked) {
+                    campoContrasena.style.display = 'block';
+                } else {
+                    campoContrasena.style.display = 'none';
+                }
+            });
+        });
+
+        $(".open-dialog-edit").click(function() {
+        var rutinaId = $(this).data("rutina-id");
+        var rutinaFecha = $(this).data("rutina-fecha");
+        
+        $("#fecha_rutina_edit_"+rutinaId).val(rutinaFecha);
+        $("#rutina-dialog-edit-" + rutinaId).show();
+        });
+
+        $(".modal .btn-secondary").click(function() {
+            $(this).closest(".modal").hide();
+        });
+
+
+
+    </script>
+</body>
+</html>

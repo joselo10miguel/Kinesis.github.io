@@ -1,0 +1,166 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="stylesheet" href="{% static 'css/progress_bar.css' %}">
+
+    <title>Paciente</title>
+
+    <!-- Custom fonts for this template-->
+    
+ 
+    
+</head>
+
+<body id="page-top">
+
+
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+       {% include 'menuPaciente.html' %}
+        <!-- End of Sidebar -->
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                {% include 'barra_Informativa_Paciente.html' %}
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                       <!-- Page Heading -->
+                        <ol class="breadcrumb mb-4">
+                            <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Panel de Información</a></li>
+                            <li class="breadcrumb-item">Iniciar Rutina</li>
+                            
+                        </ol>
+                    </div>
+                    
+                    <div class="row">
+
+                        <!-- Content Column -->
+
+
+                        <div class="col-lg-12 mb-4">
+
+                            <!-- Illustrations -->
+                            <div class="card shadow mb-4">
+                                <!-- Page Heading
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Iniciar Rutina</h6>
+                                </div>
+                                 -->
+                                <div class="card-body">
+                                    <div class="text-center">
+                                        
+                                    </div>
+                                    <p>Hola {{ user.username }}: </p>
+                                    <p>Para obtener los mejores resultados, asegúrate de cumplir con las recomendaciones indicadas por el doctor.</p>
+                                 
+                                    <p>{{ paciente.rutinas_asignadas }} </p>
+                                    <p> {{ rutinas_completas }}</p>
+                                    
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Rutina</th>
+                                                    <th>Fecha de Inicio</th>
+                                                    <th>Estado</th>
+                                                    <th>Acción</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for rutina in rutinas %}
+                                                <tr>
+                                                    <td>{{ rutina.numero_rutina }}</td>
+                                                    <td>{{ rutina.fecha_inicio | date:"d-M-Y" }}</td>
+                                                    <td>
+                                                        {% if rutina.is_completed %}
+                                                            Completada
+                                                        {% else %}
+                                                            Pendiente
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>
+                                                        
+                                                        {% if rutina.fecha_inicio|date:"d-M-Y" == fecha_actual|date:"d-M-Y" %}
+                                                        {% if not rutina.is_completed %}
+                                            
+                                                            {% if paciente.tipo_lesion == "Lesión media en el hombro izquierdo" or rutina.tipo_lesion == "Lesión media en el hombro derecho" %}
+                                                                <form method="post" action="{% url 'rutina_lesion_media' rutina.numero_rutina %}">
+                                                            {% else %}
+                                                                <form method="post" action="{% url 'rutina' rutina.numero_rutina %}">
+                                                            {% endif %}
+                                                                {% csrf_token %}
+                                                                <button class="btn btn-warning">Realizar Rutina</button>
+                                                            </form>
+                                                        {% else %}
+                                                            <button class="btn btn-success" disabled>Realizada</button>
+                                                        {% endif %}
+                                                    {% elif rutina.fecha_inicio|date:"d-M-Y" < fecha_actual|date:"d-M-Y" and rutina.is_completed %}
+                                                        <button class="btn btn-success" disabled>Realizada</button>
+                                                    {% else %}
+                                                        <button class="btn btn-danger" disabled>No disponible</button>
+                                                    {% endif %}
+                                                    
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                        
+                                </div>
+                            </div>
+
+                           
+
+                        </div>
+                    </div>
+                    
+
+
+                </div>
+                <!-- /.container-fluid -->
+
+        </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+        
+            <!-- End of Footer -->
+            <footer class="sticky-footer bg-white">
+                {% include 'footerPaciente.html' %}
+             </footer>
+        </div>
+      
+        <!-- End of Content Wrapper -->
+
+    </div>
+    </div>
+    <!-- End of Page Wrapper -->
+
+    
+
+<script src="{% static 'javaScript/mediapipe.js' %}"></script>
+
+<script src="{% static  'js/progress.js' %}"></script>
+<script src="{% static  'js/rutina_paciente.js' %}"></script>
+
+</body>
+
+</html>
